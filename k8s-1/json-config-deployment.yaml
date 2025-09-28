@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: json-config-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: json-app
+  template:
+    metadata:
+      labels:
+        app: json-app
+    spec:
+      containers:
+      - name: json-container
+        image: nginx:latest
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/config
+            readOnly: true
+      volumes:
+        - name: config-volume
+          configMap:
+            name: config-json
