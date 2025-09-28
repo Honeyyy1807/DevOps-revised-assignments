@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp
+  namespace: argocd
+spec:
+  project: myproject
+  source:
+    repoURL: https://github.com/Honeyyy1807/DevOps-Assignments.git
+    targetRevision: argocd-task
+    path: chart1
+    helm:
+      valueFiles:
+      - values-k8s.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: myapp
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
