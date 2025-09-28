@@ -1,0 +1,102 @@
+
+replicaCount: 2
+
+image:
+  repository: nginx
+  tag: "1.27.0"
+  pullPolicy: IfNotPresent
+
+
+command: []
+args: []
+
+
+ports:
+  - name: http
+    containerPort: 80
+    protocol: TCP
+
+
+env:
+  - name: ENVIRONMENT
+    value: "dev"
+  - name: LOG_LEVEL
+    value: "debug"
+
+
+resources:
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+  requests:
+    cpu: "200m"
+    memory: "256Mi"
+
+
+nodeSelector:
+  disktype: ssd
+
+
+volumes:
+  - name: app-config
+    configMap:
+      name: my-config
+volumeMounts:
+  - name: app-config
+    mountPath: /etc/config
+
+
+volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: standard
+
+
+service:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: example.local
+      paths:
+        - path: /
+          pathType: Prefix
+          servicePort: 80
+  tls: []
+ 
+
+
+configmap:
+  enabled: true
+  data:
+    APP_MODE: "development"
+    FEATURE_FLAG: "true"
+
+
+secret:
+  enabled: true
+  data:
+    DB_USER: admin
+    DB_PASS: password123
+
+
+pvc:
+  enabled: true
+  accessModes:
+    - ReadWriteOnce
+  storage: 1Gi
+  storageClassName: standard
