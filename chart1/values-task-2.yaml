@@ -1,0 +1,111 @@
+replicaCount: 1
+
+image:
+  repository: nginx
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+
+configmaps:
+  - name: app-config
+    enabled: true
+    data:
+      APP_ENV: "development"
+  - name: json-config
+    enabled: true
+    data:
+      APP_ENV: "development"
+      FEATURE_FLAG: "true"
+
+
+secrets:
+  - name: app-secret
+    enabled: true
+    data:
+      DB_PASSWORD: mysecretpassword
+
+
+deployments:
+  - name: nginx
+    enabled: true
+    replicaCount: 3
+    image:
+      repository: nginx
+      tag: "1.23"
+      pullPolicy: IfNotPresent
+    ports:
+      - containerPort: 80
+
+  - name: env-deployment
+    enabled: true
+    replicaCount: 1
+    image:
+      repository: nginx
+      tag: "latest"
+      pullPolicy: IfNotPresent
+    envFromConfigMap: app-config
+    envFromSecret: app-secret
+
+  - name: json-config-deployment
+    enabled: true
+    replicaCount: 1
+    image:
+      repository: nginx
+      tag: "latest"
+      pullPolicy: IfNotPresent
+    volumeMounts:
+      - name: config-volume
+        mountPath: /etc/config
+        readOnly: true
+    volumes:
+      - name: config-volume
+        configMap:
+          name: json-config
+
+
+services:
+  - name: nginx-service
+    type: ClusterIP
+    selector: nginx
+    ports:
+      - name: http
+        port: 80
+        targetPort: 80
+
+
+ingress:
+  enabled: true
+  name: nginx-ingress
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: nginx.local
+      paths:
+        - path: /
+          pathType: Prefix
+          service:
+            name: nginx-service
+            port: 80
+
+
+statefulsets:
+  - name: web-stateful
+    enabled: true
+    replicaCount: 2
+    serviceName: web
+    image:
+      repository: nginx
+      tag: "1.23"
+      pullPolicy: IfNotPresent
+    ports:
+      - containerPort: 80
+    volumeClaimTemplates:
+      - metadata:
+          name: web-pvc
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 1Gi
+

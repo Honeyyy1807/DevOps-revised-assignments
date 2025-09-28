@@ -1,0 +1,54 @@
+{{- range .Values.statefulsets }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $.Release.Name }}-{{ .name }}
+  labels:
+    app: {{ .name }}
+    chart: {{ $.Chart.Name }}-{{ $.Chart.Version }}
+    release: {{ $.Release.Name }}
+spec:
+  serviceName: {{ .serviceName }}
+  replicas: {{ .replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .name }}
+    spec:
+      containers:
+        - name: {{ .name }}
+          image: "{{ .image.repository }}:{{ .image.tag }}"
+          imagePullPolicy: {{ .image.pullPolicy }}
+
+          {{- if .ports }}
+          ports:
+            {{- range .ports }}
+            - name: {{ .name | default "http" }}
+              containerPort: {{ .containerPort }}
+              protocol: {{ .protocol | default "TCP" }}
+            {{- end }}
+          {{- end }}
+
+          {{- if .env }}
+          env:
+            {{- toYaml .env | nindent 12 }}
+          {{- end }}
+
+          {{- if .volumeMounts }}
+          volumeMounts:
+            {{- toYaml .volumeMounts | nindent 12 }}
+          {{- end }}
+
+      {{- if .volumes }}
+      volumes:
+        {{- toYaml .volumes | nindent 8 }}
+      {{- end }}
+  volumeClaimTemplates:
+    {{- if .volumeClaimTemplates }}
+    {{- toYaml .volumeClaimTemplates | nindent 4 }}
+    {{- end }}
+---
+{{- end }}
