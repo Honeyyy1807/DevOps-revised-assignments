@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: myproject
+  namespace: argocd
+spec:
+  description: Project for my team
+  sourceRepos:
+  - https://github.com/Honeyyy1807/DevOps-Assignments.git
+  destinations:
+  - namespace: "*"
+    server: "*"
+  roles:
+  - name: dev-role
+    description: Devs can sync apps
+    policies:
+    - p, proj:myproject:dev-role, applications, sync, *, allow
+    groups:
+    - devs
