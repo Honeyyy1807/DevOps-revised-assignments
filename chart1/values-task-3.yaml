@@ -1,0 +1,104 @@
+ingress:
+  enabled: false
+
+secret:
+  enabled: true
+  data:
+    POSTGRES_USER: honeybhandari
+    POSTGRES_PASSWORD: honey123
+    POSTGRES_DB: permalist
+
+
+services:
+ 
+  - name: postgres
+    type: ClusterIP
+    ports:
+      - name: postgres
+        port: 5432
+        targetPort: 5432
+        protocol: TCP
+    selector: postgres-sta
+
+  - name: backend
+    type: NodePort
+    ports:
+      - name: http
+        port: 3000
+        targetPort: 3000
+        nodePort: 32081
+        protocol: TCP
+    selector: backend-1
+
+
+deployments:
+  - name: backend-1
+    replicaCount: 1
+    image:
+      repository: my-backend
+      tag: latest
+      pullPolicy: IfNotPresent
+    ports:
+      - name: http
+        containerPort: 3000
+        protocol: TCP
+    resources: {}
+    service:
+      type: NodePort
+      ports:
+        - name: http
+          port: 3000
+          targetPort: 3000
+          nodePort: 32080
+          protocol: TCP
+    ingress:
+      enabled: false
+configmap:
+  enabled: true
+  data:
+    DB_HOST: postgres
+    DB_PORT: "5432"
+
+statefulsets:
+  - name: postgres-sta
+    replicaCount: 1
+    serviceName: postgres
+    image:
+      repository: postgres
+      tag: "15"
+      pullPolicy: IfNotPresent
+    ports:
+      - name: postgres
+        containerPort: 5432
+        protocol: TCP
+
+
+    env:
+      - name: POSTGRES_USER
+        valueFrom:
+          secretKeyRef:
+            name: postgres-secret
+            key: POSTGRES_USER
+      - name: POSTGRES_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: postgres-secret
+            key: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        valueFrom:
+          secretKeyRef:
+            name: postgres-secret
+            key: POSTGRES_DB
+    
+    volumeMounts:
+      - name: postgres-storage
+        mountPath: /var/lib/postgresql/data
+    volumeClaimTemplates:
+      - metadata:
+          name: postgres-storage
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 2Gi
+          storageClassName: standard
