@@ -1,5 +1,9 @@
 FROM node:20-alpine
 
+RUN adduser -D user1
+
+USER user1
+
 WORKDIR /app
 
 COPY package*.json ./
