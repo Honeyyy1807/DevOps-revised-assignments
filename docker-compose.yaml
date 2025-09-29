@@ -1,5 +1,5 @@
 services:
-  postgres-compose:
+  postgres:
     image: postgres:15-alpine
     volumes:
       - pgdata1:/var/lib/postgresql/data
@@ -7,7 +7,7 @@ services:
       - "5432:5432"
     env_file:
       - .env
-  backend-compose: 
+  backend: 
     build: .
     ports:
       - "3000:3000"
