@@ -1,0 +1,500 @@
+honeybhandari@Honeys-MacBook-Air ~ % docker network create myapp\
+c17c40370bfd043d447fecb01b72dad53c8a4c2776c53866f0a74c7f52b0fde8\
+\
+honeybhandari@Honeys-MacBook-Air ~ % docker run -d \\\
+  --name postgres \\\
+  --network myapp \\        \
+  -e POSTGRES_USER=honeybhandari \\\
+  -e POSTGRES_PASSWORD=honey123 \\\
+  -e POSTGRES_DB=permalist \\\
+  -v pgdata:/var/lib/postgresql/data \\\
+  -p 5432:5432 \\\
+  postgres:15-alpine\
+Unable to find image 'postgres:15-alpine' locally\
+15-alpine: Pulling from library/postgres\
+9df7fa787b13: Pull complete \
+6e174226ea69: Pull complete \
+314243f98e4f: Pull complete \
+094175cd2ba7: Pull complete \
+8deea10e4239: Pull complete \
+92fbf6743d9a: Pull complete \
+2c28e0495489: Pull complete \
+7a04b91c81b4: Pull complete \
+d02c26bc5154: Pull complete \
+0bcc67a02642: Pull complete \
+0a06256c198c: Pull complete \
+Digest: sha256:1414298ea93186123a6dcf872f778ba3bd2347edcbd2f31aa7bb2d9814ff5393\
+Status: Downloaded newer image for postgres:15-alpine\
+21a8dec56652ab632a8f1072801b300cdd3cbcdf2039b85e653cb0a87101ee27\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\
+honeybhandari@Honeys-MacBook-Air ~ % docker inspect postgres\
+[\
+    \{\
+        "Id": "21a8dec56652ab632a8f1072801b300cdd3cbcdf2039b85e653cb0a87101ee27",\
+        "Created": "2025-08-14T12:37:10.185610795Z",\
+        "Path": "docker-entrypoint.sh",\
+        "Args": [\
+            "postgres"\
+        ],\
+        "State": \{\
+            "Status": "exited",\
+            "Running": false,\
+            "Paused": false,\
+            "Restarting": false,\
+            "OOMKilled": false,\
+            "Dead": false,\
+            "Pid": 0,\
+            "ExitCode": 0,\
+            "Error": "",\
+            "StartedAt": "2025-08-14T12:37:10.353575587Z",\
+            "FinishedAt": "2025-08-14T13:37:21.380368882Z"\
+        \},\
+        "Image": "sha256:1414298ea93186123a6dcf872f778ba3bd2347edcbd2f31aa7bb2d9814ff5393",\
+        "ResolvConfPath": "/var/lib/docker/containers/21a8dec56652ab632a8f1072801b300cdd3cbcdf2039b85e653cb0a87101ee27/resolv.conf",\
+        "HostnamePath": "/var/lib/docker/containers/21a8dec56652ab632a8f1072801b300cdd3cbcdf2039b85e653cb0a87101ee27/hostname",\
+        "HostsPath": "/var/lib/docker/containers/21a8dec56652ab632a8f1072801b300cdd3cbcdf2039b85e653cb0a87101ee27/hosts",\
+        "LogPath": "/var/lib/docker/containers/21a8dec56652ab632a8f1072801b300cdd3cbcdf2039b85e653cb0a87101ee27/21a8dec56652ab632a8f1072801b300cdd3cbcdf2039b85e653cb0a87101ee27-json.log",\
+        "Name": "/postgres",\
+        "RestartCount": 0,\
+        "Driver": "overlayfs",\
+        "Platform": "linux",\
+        "MountLabel": "",\
+        "ProcessLabel": "",\
+        "AppArmorProfile": "",\
+        "ExecIDs": null,\
+        "HostConfig": \{\
+            "Binds": [\
+                "pgdata:/var/lib/postgresql/data"\
+            ],\
+            "ContainerIDFile": "",\
+            "LogConfig": \{\
+                "Type": "json-file",\
+                "Config": \{\}\
+            \},\
+            "NetworkMode": "myapp",\
+            "PortBindings": \{\
+                "5432/tcp": [\
+                    \{\
+                        "HostIp": "",\
+                        "HostPort": "5432"\
+                    \}\
+                ]\
+            \},\
+            "RestartPolicy": \{\
+                "Name": "no",\
+                "MaximumRetryCount": 0\
+            \},\
+            "AutoRemove": false,\
+            "VolumeDriver": "",\
+            "VolumesFrom": null,\
+            "ConsoleSize": [\
+                54,\
+                153\
+            ],\
+            "CapAdd": null,\
+            "CapDrop": null,\
+            "CgroupnsMode": "private",\
+            "Dns": [],\
+            "DnsOptions": [],\
+            "DnsSearch": [],\
+            "ExtraHosts": null,\
+            "GroupAdd": null,\
+            "IpcMode": "private",\
+            "Cgroup": "",\
+            "Links": null,\
+            "OomScoreAdj": 0,\
+            "PidMode": "",\
+            "Privileged": false,\
+            "PublishAllPorts": false,\
+            "ReadonlyRootfs": false,\
+            "SecurityOpt": null,\
+            "UTSMode": "",\
+            "UsernsMode": "",\
+            "ShmSize": 67108864,\
+            "Runtime": "runc",\
+            "Isolation": "",\
+            "CpuShares": 0,\
+            "Memory": 0,\
+            "NanoCpus": 0,\
+            "CgroupParent": "",\
+            "BlkioWeight": 0,\
+            "BlkioWeightDevice": [],\
+            "BlkioDeviceReadBps": [],\
+            "BlkioDeviceWriteBps": [],\
+            "BlkioDeviceReadIOps": [],\
+            "BlkioDeviceWriteIOps": [],\
+            "CpuPeriod": 0,\
+            "CpuQuota": 0,\
+            "CpuRealtimePeriod": 0,\
+            "CpuRealtimeRuntime": 0,\
+            "CpusetCpus": "",\
+            "CpusetMems": "",\
+            "Devices": [],\
+            "DeviceCgroupRules": null,\
+            "DeviceRequests": null,\
+            "MemoryReservation": 0,\
+            "MemorySwap": 0,\
+            "MemorySwappiness": null,\
+            "OomKillDisable": null,\
+            "PidsLimit": null,\
+            "Ulimits": [],\
+            "CpuCount": 0,\
+            "CpuPercent": 0,\
+            "IOMaximumIOps": 0,\
+            "IOMaximumBandwidth": 0,\
+            "MaskedPaths": [\
+                "/proc/asound",\
+                "/proc/acpi",\
+                "/proc/interrupts",\
+                "/proc/kcore",\
+                "/proc/keys",\
+                "/proc/latency_stats",\
+                "/proc/timer_list",\
+                "/proc/timer_stats",\
+                "/proc/sched_debug",\
+                "/proc/scsi",\
+                "/sys/firmware",\
+                "/sys/devices/virtual/powercap"\
+            ],\
+            "ReadonlyPaths": [\
+                "/proc/bus",\
+                "/proc/fs",\
+                "/proc/irq",\
+                "/proc/sys",\
+                "/proc/sysrq-trigger"\
+            ]\
+        \},\
+        "GraphDriver": \{\
+            "Data": null,\
+            "Name": "overlayfs"\
+        \},\
+        "Mounts": [\
+            \{\
+                "Type": "volume",\
+                "Name": "pgdata",\
+                "Source": "/var/lib/docker/volumes/pgdata/_data",\
+                "Destination": "/var/lib/postgresql/data",\
+                "Driver": "local",\
+                "Mode": "z",\
+                "RW": true,\
+                "Propagation": ""\
+            \}\
+        ],\
+        "Config": \{\
+            "Hostname": "21a8dec56652",\
+            "Domainname": "",\
+            "User": "",\
+            "AttachStdin": false,\
+            "AttachStdout": false,\
+            "AttachStderr": false,\
+            "ExposedPorts": \{\
+                "5432/tcp": \{\}\
+            \},\
+            "Tty": false,\
+            "OpenStdin": false,\
+            "StdinOnce": false,\
+            "Env": [\
+                "POSTGRES_USER=honeybhandari",\
+                "POSTGRES_PASSWORD=honey123",\
+                "POSTGRES_DB=permalist",\
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",\
+                "GOSU_VERSION=1.17",\
+                "LANG=en_US.utf8",\
+                "PG_MAJOR=15",\
+                "PG_VERSION=15.13",\
+                "PG_SHA256=4f62e133d22ea08a0401b0840920e26698644d01a80c34341fb732dd0a90ca5d",\
+                "DOCKER_PG_LLVM_DEPS=llvm19-dev \\t\\tclang19",\
+                "PGDATA=/var/lib/postgresql/data"\
+            ],\
+            "Cmd": [\
+                "postgres"\
+            ],\
+            "Image": "postgres:15-alpine",\
+            "Volumes": \{\
+                "/var/lib/postgresql/data": \{\}\
+            \},\
+            "WorkingDir": "/",\
+            "Entrypoint": [\
+                "docker-entrypoint.sh"\
+            ],\
+            "OnBuild": null,\
+            "Labels": \{\},\
+            "StopSignal": "SIGINT"\
+        \},\
+        "NetworkSettings": \{\
+            "Bridge": "",\
+            "SandboxID": "",\
+            "SandboxKey": "",\
+            "Ports": \{\},\
+            "HairpinMode": false,\
+            "LinkLocalIPv6Address": "",\
+            "LinkLocalIPv6PrefixLen": 0,\
+            "SecondaryIPAddresses": null,\
+            "SecondaryIPv6Addresses": null,\
+            "EndpointID": "",\
+            "Gateway": "",\
+            "GlobalIPv6Address": "",\
+            "GlobalIPv6PrefixLen": 0,\
+            "IPAddress": "",\
+            "IPPrefixLen": 0,\
+            "IPv6Gateway": "",\
+            "MacAddress": "",\
+            "Networks": \{\
+                "myapp": \{\
+                    "IPAMConfig": null,\
+                    "Links": null,\
+                    "Aliases": null,\
+                    "MacAddress": "",\
+                    "DriverOpts": null,\
+                    "GwPriority": 0,\
+                    "NetworkID": "c17c40370bfd043d447fecb01b72dad53c8a4c2776c53866f0a74c7f52b0fde8",\
+                    "EndpointID": "",\
+                    "Gateway": "",\
+                    "IPAddress": "",\
+                    "IPPrefixLen": 0,\
+                    "IPv6Gateway": "",\
+                    "GlobalIPv6Address": "",\
+                    "GlobalIPv6PrefixLen": 0,\
+                    "DNSNames": [\
+                        "postgres",\
+                        "21a8dec56652"\
+                    ]\
+                \}\
+            \}\
+        \},\
+        "ImageManifestDescriptor": \{\
+            "mediaType": "application/vnd.oci.image.manifest.v1+json",\
+            "digest": "sha256:fd224336c156d139a6e887dc4eb616528deccdcb69c031f5e105a0b12e4edb14",\
+            "size": 3056,\
+            "annotations": \{\
+                "com.docker.official-images.bashbrew.arch": "arm64v8",\
+                "org.opencontainers.image.base.digest": "sha256:4562b419adf48c5f3c763995d6014c123b3ce1d2e0ef2613b189779caa787192",\
+                "org.opencontainers.image.base.name": "alpine:3.22",\
+                "org.opencontainers.image.created": "2025-07-15T22:34:16Z",\
+                "org.opencontainers.image.revision": "2c6fe8daca9d2ccc143afe6b1cdbc1eb80379d3f",\
+                "org.opencontainers.image.source": "https://github.com/docker-library/postgres.git#2c6fe8daca9d2ccc143afe6b1cdbc1eb80379d3f:15/alpine3.22",\
+                "org.opencontainers.image.url": "https://hub.docker.com/_/postgres",\
+                "org.opencontainers.image.version": "15.13-alpine3.22"\
+            \},\
+            "platform": \{\
+                "architecture": "arm64",\
+                "os": "linux",\
+                "variant": "v8"\
+            \}\
+        \}\
+    \}\
+]\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+honeybhandari@Honeys-MacBook-Air ~ % docker build -t my-backend -f dockerfile.backend .\
+\
+honeybhandari@Honeys-MacBook-Air ~ % docker run -d \\\
+  --name backend \\\
+  --network myapp \\\
+  -p 3000:3000 \\\
+  -e DB_HOST=postgres \\\
+  -e DB_PORT=5432 \\\
+  -e DB_USER=honeybhandari \\\
+  -e DB_PASSWORD=honey123 \\\
+  -e DB_DATABASE=permalist \\\
+  my-backend\
+7ec451beb75f09ca6d2f4c79f6d801d3f91f1975485ddbb8a2a9d9da2174fe85\
+\
+honeybhandari@Honeys-MacBook-Air ~ % docker exec -it backend\
+docker: 'docker exec' requires at least 2 arguments\
+\
+Usage:  docker exec [OPTIONS] CONTAINER COMMAND [ARG...]\
+\
+See 'docker exec --help' for more information\
+honeybhandari@Honeys-MacBook-Air ~ % docker exec -it backend bash\
+OCI runtime exec failed: exec failed: unable to start container process: exec: "bash": executable file not found in $PATH: unknown\
+honeybhandari@Honeys-MacBook-Air ~ % docker exec -it backend zsh \
+OCI runtime exec failed: exec failed: unable to start container process: exec: "zsh": executable file not found in $PATH: unknown\
+honeybhandari@Honeys-MacBook-Air ~ % docker exec -it backend sh \
+/app # curl localhost:3000\
+sh: curl: not found\
+/app # apk add --no-cache curl\
+fetch https://dl-cdn.alpinelinux.org/alpine/v3.22/main/aarch64/APKINDEX.tar.gz\
+fetch https://dl-cdn.alpinelinux.org/alpine/v3.22/community/aarch64/APKINDEX.tar.gz\
+(1/9) Installing brotli-libs (1.1.0-r2)\
+(2/9) Installing c-ares (1.34.5-r0)\
+(3/9) Installing libunistring (1.3-r0)\
+(4/9) Installing libidn2 (2.3.7-r0)\
+(5/9) Installing nghttp2-libs (1.65.0-r0)\
+(6/9) Installing libpsl (0.21.5-r3)\
+(7/9) Installing zstd-libs (1.5.7-r0)\
+(8/9) Installing libcurl (8.14.1-r1)\
+(9/9) Installing curl (8.14.1-r1)\
+Executing busybox-1.37.0-r18.trigger\
+OK: 15 MiB in 27 packages\
+/app # curl localhost:3000\
+<!DOCTYPE html>\
+<html lang="en">\
+\
+<head>\
+  <meta charset="UTF-8" />\
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />\
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\
+  <link rel="stylesheet" href="styles/main.css" />\
+  <title>Permalist</title>\
+</head>\
+\
+<body>\
+  <main>\
+ \
+  <div class="box" id="heading">\
+    <h1>\
+      15.08 To-Do List\
+    </h1>\
+  </div>\
+  \
+  <div class="box">\
+    \
+      <div class="item">\
+        <form action="/delete" method="post">\
+          <input type="checkbox" onchange="this.form.submit()" name="deleteItemId" value="1">\
+        </form>\
+\
+        <p id="title1">\
+          created dockerfile\
+        </p>\
+\
+        <form class="edit" action="/edit" method="post">\
+          <input type="hidden" name="updatedItemId" value="1">\
+          <input id="input1" type="text" name="updatedItemTitle" value="created dockerfile" autocomplete="off"\
+            autofocus="true" hidden="true" />\
+          <button id="done1" class="edit" type="submit" hidden><img class="icon"\
+              src="/assets/icons/check-solid.svg" alt="tick image"></button>\
+        </form>\
+\
+        <button id="edit1" class="edit" onclick="handler('1')"> \
+          <img class="icon" src="/assets/icons/pencil-solid.svg" alt="pencil image">\
+        </button>\
+\
+      </div>\
+      \
+\
+        <form class="item" action="/add" method="post">\
+          <input type="text" name="newItem" placeholder="New Item" autocomplete="off" autofocus="true" />\
+          <button class="add" type="submit" name="list" value=15.08 To-Do List >+</button>\
+        </form>\
+  </div>\
+\
+  <!-- button handler -->\
+  <script>\
+    function handler(id) \{\
+      document.getElementById("title" + id).setAttribute("hidden", true)\
+      document.getElementById("edit" + id).setAttribute("hidden", true)\
+      document.getElementById("done" + id).removeAttribute("hidden")\
+      document.getElementById("input" + id).removeAttribute("hidden")\
+    \}\
+  </script>\
+  </main>\
+<footer>Copyright \'a9 Syvora  2025\
+</footer>\
+</body>\
+\
+</html>/app # exit\
+\
+honeybhandari@Honeys-MacBook-Air ~ % docker logs backend \
+\
+> 5-capstone---todo-list@1.0.0 start\
+> node index.js\
+\
+\uc0\u9989  Connected to PostgreSQL\
+\uc0\u9989  Ensured 'items' table exists\
+\uc0\u55357 \u56960  Server running on http://localhost:3000\
+honeybhandari@Honeys-MacBook-Air ~ % docker logs postgres\
+The files belonging to this database system will be owned by user "postgres".\
+This user must also own the server process.\
+\
+The database cluster will be initialized with locale "en_US.utf8".\
+The default database encoding has accordingly been set to "UTF8".\
+The default text search configuration will be set to "english".\
+\
+Data page checksums are disabled.\
+\
+fixing permissions on existing directory /var/lib/postgresql/data ... ok\
+creating subdirectories ... ok\
+selecting dynamic shared memory implementation ... posix\
+selecting default max_connections ... 100\
+selecting default shared_buffers ... 128MB\
+selecting default time zone ... UTC\
+creating configuration files ... ok\
+running bootstrap script ... ok\
+sh: locale: not found\
+2025-08-14 12:37:10.625 UTC [35] WARNING:  no usable system locales were found\
+performing post-bootstrap initialization ... ok\
+initdb: warning: enabling "trust" authentication for local connections\
+initdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.\
+syncing data to disk ... ok\
+\
+\
+Success. You can now start the database server using:\
+\
+    pg_ctl -D /var/lib/postgresql/data -l logfile start\
+\
+waiting for server to start....2025-08-14 12:37:10.861 UTC [41] LOG:  starting PostgreSQL 15.13 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 14.2.0) 14.2.0, 64-bit\
+2025-08-14 12:37:10.862 UTC [41] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"\
+2025-08-14 12:37:10.863 UTC [44] LOG:  database system was shut down at 2025-08-14 12:37:10 UTC\
+2025-08-14 12:37:10.865 UTC [41] LOG:  database system is ready to accept connections\
+ done\
+server started\
+CREATE DATABASE\
+\
+\
+/usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*\
+\
+waiting for server to shut down....2025-08-14 12:37:10.987 UTC [41] LOG:  received fast shutdown request\
+2025-08-14 12:37:10.988 UTC [41] LOG:  aborting any active transactions\
+2025-08-14 12:37:10.989 UTC [41] LOG:  background worker "logical replication launcher" (PID 47) exited with exit code 1\
+2025-08-14 12:37:10.989 UTC [42] LOG:  shutting down\
+2025-08-14 12:37:10.989 UTC [42] LOG:  checkpoint starting: shutdown immediate\
+2025-08-14 12:37:11.010 UTC [42] LOG:  checkpoint complete: wrote 921 buffers (5.6%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.008 s, sync=0.013 s, total=0.022 s; sync files=301, longest=0.004 s, average=0.001 s; distance=4238 kB, estimate=4238 kB\
+2025-08-14 12:37:11.012 UTC [41] LOG:  database system is shut down\
+ done\
+server stopped\
+\
+PostgreSQL init process complete; ready for start up.\
+\
+2025-08-14 12:37:11.106 UTC [1] LOG:  starting PostgreSQL 15.13 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 14.2.0) 14.2.0, 64-bit\
+2025-08-14 12:37:11.106 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432\
+2025-08-14 12:37:11.106 UTC [1] LOG:  listening on IPv6 address "::", port 5432\
+2025-08-14 12:37:11.107 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"\
+2025-08-14 12:37:11.109 UTC [57] LOG:  database system was shut down at 2025-08-14 12:37:11 UTC\
+2025-08-14 12:37:11.111 UTC [1] LOG:  database system is ready to accept connections\
+2025-08-14 12:42:11.223 UTC [55] LOG:  checkpoint starting: time\
+2025-08-14 12:42:15.511 UTC [55] LOG:  checkpoint complete: wrote 44 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=4.277 s, sync=0.006 s, total=4.289 s; sync files=12, longest=0.005 s, average=0.001 s; distance=252 kB, estimate=252 kB\
+2025-08-14 13:37:21.370 UTC [1] LOG:  received fast shutdown request\
+2025-08-14 13:37:21.371 UTC [1] LOG:  aborting any active transactions\
+2025-08-14 13:37:21.373 UTC [1] LOG:  background worker "logical replication launcher" (PID 60) exited with exit code 1\
+2025-08-14 13:37:21.373 UTC [55] LOG:  shutting down\
+2025-08-14 13:37:21.374 UTC [55] LOG:  checkpoint starting: shutdown immediate\
+2025-08-14 13:37:21.376 UTC [55] LOG:  checkpoint complete: wrote 0 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=0, longest=0.000 s, average=0.000 s; distance=0 kB, estimate=227 kB\
+2025-08-14 13:37:21.378 UTC [1] LOG:  database system is shut down\
+\
+PostgreSQL Database directory appears to contain a database; Skipping initialization\
+\
+2025-08-15 16:46:51.221 UTC [1] LOG:  starting PostgreSQL 15.13 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 14.2.0) 14.2.0, 64-bit\
+2025-08-15 16:46:51.221 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432\
+2025-08-15 16:46:51.221 UTC [1] LOG:  listening on IPv6 address "::", port 5432\
+2025-08-15 16:46:51.222 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"\
+2025-08-15 16:46:51.224 UTC [29] LOG:  database system was shut down at 2025-08-14 13:37:21 UTC\
+2025-08-15 16:46:51.228 UTC [1] LOG:  database system is ready to accept connections\
+2025-08-15 16:51:51.328 UTC [27] LOG:  checkpoint starting: time\
+2025-08-15 16:51:56.337 UTC [27] LOG:  checkpoint complete: wrote 51 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=4.993 s, sync=0.010 s, total=5.009 s; sync files=42, longest=0.007 s, average=0.001 s; distance=154 kB, estimate=154 kB\
+2025-08-15 16:56:51.442 UTC [27] LOG:  checkpoint starting: time\
+2025-08-15 16:56:52.592 UTC [27] LOG:  checkpoint complete: wrote 12 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.140 s, sync=0.006 s, total=1.151 s; sync files=9, longest=0.005 s, average=0.001 s; distance=9 kB, estimate=139 kB\
+honeybhandari@Honeys-MacBook-Air ~ % docker run -it ubuntu \
+root@63d4d892504e:/# curl localhost:3000\
+bash: curl: command not found\
+root@63d4d892504e:/# exit\
+exit\
+\
+honeybhandari@Honeys-MacBook-Air ~ % docker stop backend postgres\
+backend\
+postgres\
