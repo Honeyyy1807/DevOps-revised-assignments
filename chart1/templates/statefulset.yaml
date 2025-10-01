@@ -18,37 +18,60 @@ spec:
       labels:
         app: {{ .name }}
     spec:
+      {{- with .affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
       containers:
+        {{- range .containers }}
         - name: {{ .name }}
           image: "{{ .image.repository }}:{{ .image.tag }}"
           imagePullPolicy: {{ .image.pullPolicy }}
 
-          {{- if .ports }}
+          {{- with .ports }}
           ports:
-            {{- range .ports }}
-            - name: {{ .name | default "http" }}
-              containerPort: {{ .containerPort }}
-              protocol: {{ .protocol | default "TCP" }}
-            {{- end }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
 
-          {{- if .env }}
+          {{- with .env }}
           env:
-            {{- toYaml .env | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
 
-          {{- if .volumeMounts }}
+          {{- with .envFrom }}
+          envFrom:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          {{- with .resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          {{- with .volumeMounts }}
           volumeMounts:
-            {{- toYaml .volumeMounts | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
+        {{- end }}
 
-      {{- if .volumes }}
+      {{- with .volumes }}
       volumes:
-        {{- toYaml .volumes | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
+  {{- with .volumeClaimTemplates }}
   volumeClaimTemplates:
-    {{- if .volumeClaimTemplates }}
-    {{- toYaml .volumeClaimTemplates | nindent 4 }}
-    {{- end }}
----
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
 {{- end }}

@@ -1,102 +1,157 @@
+configmap:
+  enabled: true
+  data:
+    APP_ENV: production
+    LOG_LEVEL: info
 
-replicaCount: 2
-
-image:
-  repository: nginx
-  tag: "1.27.0"
-  pullPolicy: IfNotPresent
-
-
-command: []
-args: []
-
-
-ports:
-  - name: http
-    containerPort: 80
-    protocol: TCP
-
-
-env:
-  - name: ENVIRONMENT
-    value: "dev"
-  - name: LOG_LEVEL
-    value: "debug"
-
-
-resources:
-  limits:
-    cpu: "500m"
-    memory: "512Mi"
-  requests:
-    cpu: "200m"
-    memory: "256Mi"
-
-
-nodeSelector:
-  disktype: ssd
-
-
-volumes:
-  - name: app-config
-    configMap:
-      name: my-config
-volumeMounts:
-  - name: app-config
-    mountPath: /etc/config
-
-
-volumeClaimTemplates:
-  - metadata:
-      name: data
-    spec:
-      accessModes: ["ReadWriteOnce"]
-      resources:
-        requests:
-          storage: 1Gi
-      storageClassName: standard
-
-
-service:
-  type: ClusterIP
-  ports:
-    - name: http
-      port: 80
-      targetPort: 80
-      protocol: TCP
+deployments:
+  - name: myapp
+    replicaCount: 2
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values: ["myapp"]
+            topologyKey: "kubernetes.io/hostname"
+    tolerations:
+      - key: "dedicated"
+        operator: "Equal"
+        value: "frontend"
+        effect: "NoSchedule"
+    nodeSelector:
+      disktype: ssd
+    containers:
+      - name: main-app
+        image:
+          repository: nginx
+          tag: "1.27"
+          pullPolicy: IfNotPresent
+        command: ["/bin/sh"]
+        args: ["-c", "echo Hello World"]
+        ports:
+          - name: http
+            containerPort: 80
+        env:
+          - name: APP_ENV
+            value: production
+        envFrom:
+          - configMapRef:
+              name: myapp-env
+          - secretRef:
+              name: myapp-secret
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        volumeMounts:
+          - name: app-data
+            mountPath: /var/lib/data
+      - name: sidecar-logger
+        image:
+          repository: busybox
+          tag: latest
+        command: ["/bin/sh"]
+        args: ["-c", "tail -f /var/log/app.log"]
+    volumes:
+      - name: app-data
+        emptyDir: {}
 
 ingress:
   enabled: true
-  className: "nginx"
+  className: nginx
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
   hosts:
-    - host: example.local
+    - host: myapp.example.com
       paths:
         - path: /
           pathType: Prefix
           servicePort: 80
-  tls: []
- 
+  tls:
+    - hosts:
+        - myapp.example.com
+      secretName: myapp-tls
 
 
-configmap:
+pvc:
   enabled: true
-  data:
-    APP_MODE: "development"
-    FEATURE_FLAG: "true"
-
+  accessModes: ["ReadWriteOnce"]
+  storage: 1Gi
+  storageClassName: standard
 
 secret:
   enabled: true
   data:
     DB_USER: admin
-    DB_PASS: password123
+    DB_PASSWORD: password
+
+services:
+  - name: myapp
+    type: ClusterIP
+    selector: myapp
+    ports:
+      - name: http
+        port: 80
+        targetPort: 80
+        protocol: TCP
 
 
-pvc:
-  enabled: true
-  accessModes:
-    - ReadWriteOnce
-  storage: 1Gi
-  storageClassName: standard
+statefulsets:
+  - name: mydb
+    serviceName: mydb-svc
+    replicaCount: 3
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: disktype
+                  operator: In
+                  values: ["ssd"]
+    tolerations:
+      - key: "dedicated"
+        operator: "Equal"
+        value: "db"
+        effect: "NoSchedule"
+    nodeSelector:
+      disktype: ssd
+    containers:
+      - name: postgres
+        image:
+          repository: postgres
+          tag: "15"
+          pullPolicy: IfNotPresent
+        ports:
+          - name: db
+            containerPort: 5432
+            protocol: TCP
+        envFrom:
+          - configMapRef:
+              name: postgres-config
+          - secretRef:
+              name: postgres-secret
+        volumeMounts:
+          - name: db-data
+            mountPath: /var/lib/postgresql/data
+      - name: sidecar-exporter
+        image:
+          repository: exporter
+          tag: latest
+          pullPolicy: IfNotPresent
+    volumes:
+      - name: db-data
+        emptyDir: {}
+    volumeClaimTemplates:
+      - metadata:
+          name: db-data
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 1Gi
